@@ -92,6 +92,14 @@ hr{
     clear: right;
 }
 
+#submit:hover{
+    background-color: #317AD0;
+}
+
+#submit:active{
+    background-color: #1A5DAB;
+}
+
 #logo{
     padding: 20px;
 }
