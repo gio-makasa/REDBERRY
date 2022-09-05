@@ -1,29 +1,74 @@
 const API = 'https://pcfy.redberryinternship.ge/api';
 const token = '89780f3fccc1efbf3d8cf02dd67fe582';
-const info = document.getElementById('info');
+const infoelement = document.getElementById('info');
 const ID = sessionStorage.getItem('ID').toString();
 
-var teams = {};
-var positions = {};
-var brands = {};
+var teams = [];
+var positions = [];
+var brands = [];
 
 getteams(API+'/teams');
 getpositions(API+'/positions');
 getbrands(API+'/brands');
 
-const main = document.createElement('div');
+var main = document.createElement('div');
+
+async function getteams(url){
+  let resp = await fetch(url);
+  let respdata = await resp.json();
+
+  respdata.data.forEach(element => {
+    teams[element.id] = element.name;
+  });
+}
+
+async function getpositions(url){
+  let resp = await fetch(url);
+  let respdata = await resp.json();
+  
+  respdata.data.forEach(element => {
+    positions[element.id] = element.name;
+  });
+}
+
+async function getbrands(url){
+  let resp = await fetch(url);
+  let respdata = await resp.json();
+  
+  respdata.data.forEach(element => {
+    brands[element.id] = element.name;
+  });
+}
 
 getinfo(API+'/laptop/'+ID+'?token='+token);
 
 async function getinfo(url){
-    let resp = await fetch(url);
-    let respdata = await resp.json();
+  let resp = await fetch(url);
+  let respdata = await resp.json();
 
-    let rawinfo = respdata.data;
+  infochanger(respdata.data);
+}
 
-    let info = infochanger(rawinfo);
+function infochanger(info){
+  info.user.team_id = teams[info.user.team_id];
+  info.user.position_id = positions[info.user.position_id];
+  info.laptop.brand_id = brands[info.laptop.brand_id];
 
-    main.innerHTML = `<div class="col-12" id="main">
+  if(info.laptop.purchase_date == null){
+    info.laptop.purchase_date = 'ინფორმაცია არაა';
+  }
+
+  if(info.laptop.state == 'new'){
+    info.laptop.state = 'ახალი';
+  } else {
+    info.laptop.state = 'მეორადი';
+  }
+
+  isa(info);
+}
+
+function isa(info){
+  main.innerHTML = `<div class="col-12" id="main">
     <img src="${'https://pcfy.redberryinternship.ge'+info.laptop.image}" alt="laptopimage" class="col-6">
     <table class="col-6" id="info">
     <tr>
@@ -106,49 +151,4 @@ async function getinfo(url){
     </table>`;
 }
 
-function infochanger(info){
-  info.user.team_id = teams[info.user.team_id];
-  info.user.position_id = positions[info.user.position_id];
-  info.laptop.brand_id = brands[info.laptop.brand_id];
-
-  if(info.laptop.purchase_date == null){
-    info.laptop.purchase_date = 'ინფორმაცია არაა';
-  }
-
-  if(info.laptop.state == 'new'){
-    info.laptop.state = 'ახალი';
-  } else {
-    info.laptop.state = 'მეორადი';
-  }
-
-  return info;
-}
-
-async function getteams(url){
-  let resp = await fetch(url);
-  let respdata = await resp.json();
-
-  respdata.data.forEach(element => {
-    teams[element.id] = element.name;
-  });
-}
-
-async function getpositions(url){
-  let resp = await fetch(url);
-  let respdata = await resp.json();
-  
-  respdata.data.forEach(element => {
-    positions[element.id] = element.name;
-  });
-}
-
-async function getbrands(url){
-  let resp = await fetch(url);
-  let respdata = await resp.json();
-  
-  respdata.data.forEach(element => {
-    brands[element.id] = element.name;
-  });
-}
-
-info.appendChild(main);
+infoelement.appendChild(main);

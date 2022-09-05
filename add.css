@@ -73,21 +73,27 @@ body{
     justify-content: space-between;
     align-items: center;
     grid-template-columns: 49% 49%;
-    clear: both;
 }
 
-#laptopCore{
-    display: grid;
-    justify-content: space-between;
-    align-items: center;
-    grid-template-columns: 32% 32% 32%;
+hr{
+    margin: 50px 0;
 }
 
-#memory, #date_price{
-    display: grid;
-    justify-content: space-between;
-    align-items: baseline;
-    grid-template-columns: 49% 49%;
+#submit{
+    display: block;
+    background-color: #62A1EB;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 25px;
+    margin-top: 50px;
+    float: right;
+    cursor: pointer;
+    clear: right;
+}
+
+#logo{
+    padding: 20px;
 }
 
 /* input */
@@ -119,12 +125,16 @@ input:focus {
 }
 
 /* select */
+.dropdown{
+    position: relative;
+}
+
 .form-select{
     background-image: url('resource/option_arrow.png');
     background-repeat: no-repeat;
     background-position: right 0.5rem center;
     background-size: 20px 20px;
-    appearance: none;
+    position: relative;
     font-size: 1rem;
     background-color: #EBEBEB;
     font-weight: bold;
@@ -133,15 +143,28 @@ input:focus {
     height: fit-content;
     padding: 11px;
     margin-top: 20px;
+    text-align: left;
+    float: none !important;
 }
 
-.form-select:focus{
-    outline: none;
-    box-shadow: none;
-}
-
-.form-select option{
+.dropdown-content {
+    position: absolute;
+    padding: 0 !important;
     background-color: white;
+    box-shadow: 0 0 5px black;
+    border-radius: 8px;
+    overflow: hidden;
+    z-index: 1;
+    cursor: default;
+}
+
+.dropdown-content > p {
+    margin: 0;
+    padding: 10px;
+}
+
+.dropdown-content > p:hover {
+    background-color: #E7F0F8;
 }
 
 /* image input */
@@ -245,6 +268,21 @@ input:focus {
     color: #5F5F5F;
 }
 
+/*laptop info*/
+#laptopCore{
+    display: grid;
+    justify-content: space-between;
+    align-items: center;
+    grid-template-columns: 32% 32% 32%;
+}
+
+#memory, #date_price{
+    display: grid;
+    justify-content: space-between;
+    align-items: baseline;
+    grid-template-columns: 49% 49%;
+}
+
 #priceinput{
     width: 100%;
     display: flex;
@@ -262,10 +300,6 @@ input:focus {
     font-size: medium;
 }
 
-hr{
-    margin: 50px 0;
-}
-
 #backbtn{
     display: block;
     background-color: transparent;
@@ -275,23 +309,6 @@ hr{
     float: left;
     cursor: pointer;
     clear: left;
-}
-
-#submit{
-    display: block;
-    background-color: #62A1EB;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 25px;
-    margin-top: 50px;
-    float: right;
-    cursor: pointer;
-    clear: right;
-}
-
-#logo{
-    padding: 20px;
 }
 
 /*pop up window*/

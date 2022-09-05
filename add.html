@@ -40,9 +40,15 @@
                 </div>
             </div>
 
-            <select class="col-12 form-select" name="team_id" id="team_id"></select>
+            <div class="dropdown">
+                <input type="button" class="col-12 form-select"  name="team_id" id="team_id" value="თიმი" onclick="show(this)">
+                <div class="col-12 dropdown-content hide" id="teams"></div>
+            </div>
 
-            <select class="col-12 form-select" name="position_id" id="position_id" disabled></select>
+            <div class="dropdown">
+                <input type="button" class="col-12 form-select"  name="position_id" id="position_id" value="პოზიცია" onclick="show(this)" disabled>
+                <div class="col-12 dropdown-content hide" id="positions"></div>
+            </div>
             
             <div class="col-12 input">
                 <label for="email">მეილი</label>
@@ -59,7 +65,6 @@
             <input type="button" onclick="emp_validateForm()" id="submit" value="შემდეგი">
         </form>
     </div>
-
     
     <!--leptopis maxasiateblebi-->
     <div id="laptop" class="col-8 hide">
@@ -85,13 +90,19 @@
                     <p>ლათინური ასოები, ციფრები, !@#$%^&*()_+=</p>
                 </div>
                 
-                <select class="form-select" name="laptop_brand_id" id="laptop_brand_id"></select>
+                <div class="dropdown">
+                    <input type="button" class="col-12 form-select"  name="laptop_brand_id" id="laptop_brand_id" value="ლეპტოპის ბრენდი" onclick="show(this)">
+                    <div class="col-12 dropdown-content hide" id="laptop_brands"></div>
+                </div>
             </div>
 
             <hr>
 
             <div id="laptopCore">
-                <select class="form-select" name="laptop_cpu" id="laptop_cpu"></select>
+                <div class="dropdown">
+                    <input type="button" class="col-12 form-select"  name="laptop_cpu" id="laptop_cpu" value="CPU" onclick="show(this)">
+                    <div class="col-12 dropdown-content hide" id="laptop_cpus"></div>
+                </div>
                 
                 <div class="input">
                     <label for="cpucore">CPU-ს ბირთვი</label>

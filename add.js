@@ -1,148 +1,71 @@
 const API = 'https://pcfy.redberryinternship.ge/api';
-var exc = 1; //get info from localstorage once
-const info = {};
-const lapinfo = {};
-const formData = new FormData();
+const info = {}; //save info for localstorage
+const lapinfo = {}; //save info for localstorage
+var formData = new FormData(); //saves info for API
 const token = '89780f3fccc1efbf3d8cf02dd67fe582';
 
-"change keyup".split(" ").forEach((e) => {
-    document.forms['empinfo'].addEventListener(e, ()=> {
-        const empinfoData = new FormData(document.getElementById('empinfo'));
-
-        for ([key, value] of empinfoData) {
-            info[key] = value;
-            formData.append(key, value);
-
-            if(key == 'team_id'){
-                for(i of teams.children){
-                    if(i.value == value){
-                        info[key] = i.id;
-                        formData.append(key, i.id);
-                    }
-                }
-            }
-            if(key == 'position_id'){
-                for(i of positions.children){
-                    if(i.value == value){
-                        info[key] = i.id;
-                        formData.append(key, i.id);
-                    }
-                }
-            }
-        }
-
-        localStorage.setItem("info", JSON.stringify(info));
-    });
-    document.forms['lapinfo'].addEventListener(e, ()=> {
-        const lapinfoData = new FormData(document.getElementById('lapinfo'));
-
-        for ([key, value] of lapinfoData) {
-            lapinfo[key] = value;
-            formData.append(key, value);
-            
-
-            if(key == 'laptop_brand_id'){
-                for(i of laptop_brand_id.children){
-                    if(i.value == value){
-                        lapinfo[key] = i.id;
-                        formData.append(key, i.id);
-                    }
-                }
-            }
-        }
-
-        localStorage.setItem("lapinfo", JSON.stringify(lapinfo));
-    });
-});
-
 //tanamshromlis info
-const teams = document.getElementById('team_id');
-const positions = document.getElementById('position_id');
+const team = document.getElementById('team_id');
+const teams = document.getElementById('teams');
+const position = document.getElementById('position_id');
+const positions = document.getElementById('positions');
 
 getteams(API+'/teams');
+getinfo();
+
+if(sessionStorage.getItem('page') == 2){
+    emp_validateForm();
+}
 
 async function getteams(url){
     let resp = await fetch(url);
     let respdata = await resp.json();
 
-    teams.innerHTML = '<option class="hide" value="">თიმი</option>';
-    positions.innerHTML = '<option class="hide" value="">პოზიცია</option>';
-
     respdata.data.forEach(team => {
-        let option = document.createElement('option');
+        let option = document.createElement('p');
         option.id = team.id;
+        option.value = team.name;
         option.innerHTML = team.name;
         
         teams.appendChild(option);
     });
-
-
-    if(localStorage.info){
-        let getinfo = JSON.parse(localStorage.getItem("info"));
-        
-        if(getinfo.team_id){
-            for(j of teams.children){
-                if(j.id == getinfo['team_id']){
-                    document.forms['empinfo']['team_id'].value = j.value;
-                    info.team_id = j.id;
-                    getpositions(API+'/positions');
-                }
-            }
-        }
-    }
 }
 
-teams.addEventListener('change', ()=> {
-    positions.value = '';
-
-    for(i of teams.children){
-        if(i.value == teams.value){
-            info.team_id = i.id;
-        }
-    }
-
+teams.addEventListener('mouseup', (e) => {
+    team.value = e.target.value;
+    position.value = 'პოზიცია';
     getpositions(API+'/positions');
 });
 
 async function getpositions(url){
     let resp = await fetch(url);
     let respdata = await resp.json();
+    let ID;
     
-    positions.disabled = false;
-    positions.innerHTML = '';
-    positions.innerHTML = '<option class="hide" value="">პოზიცია</option>';
+    for(let p of teams.children){
+        if(p.innerHTML == team.value){
+            ID = p.id;
+        }
+    }
 
-    let getinfo = JSON.parse(localStorage.getItem("info"));
+    positions.innerHTML = '';
 
     respdata.data.forEach(position => {
-        if(position.team_id == getinfo.team_id){
-            let option = document.createElement('option');
+        let option = document.createElement('p');
+        if(position.team_id == ID){
             option.id = position.id;
+            option.value = position.name;
             option.innerHTML = position.name;
-    
+
             positions.appendChild(option);
         }
     });
 
-
-    if(getinfo.position_id){
-        for(j of positions.children){
-            if(j.id == getinfo['position_id']){
-                document.forms['empinfo']['position_id'].value = j.value;
-                info.position_id = j.id;
-            }
-        }
-    }
-
-    getinfoLS();
+    position.disabled = false;
 }
 
-positions.addEventListener('change', ()=> {
-    for(i of positions.children){
-        if(i.value == positions.value){
-            info.position_id = i.id;
-        }
-    }
+positions.addEventListener('mouseup', (e) => {
+    position.value = e.target.value;
 });
 
 function emp_validateForm(){
@@ -181,8 +104,8 @@ function emp_validateForm(){
 
     //checking team
     let team = document.forms['empinfo']['team_id'];
-
-    if(team.value == ''){
+    
+    if(team.value == 'თიმი'){
         team.style.border = 'solid 1px red';
         error++;
     } else {
@@ -192,7 +115,7 @@ function emp_validateForm(){
     //checking position
     let position = document.forms['empinfo']['position_id'];
 
-    if(position.value == ''){
+    if(position.value == 'პოზიცია'){
         position.style.border = 'solid 1px red';
         error++;
     } else {
@@ -232,118 +155,78 @@ function emp_validateForm(){
     //checks errors
     if(error == 0){
         if(window.innerWidth < 600){
-            const nav = document.getElementById('nav');
+            let nav = document.getElementById('nav');
             nav.children[0].classList.add('hide');
             nav.children[1].classList.remove('hide');
-            const border = document.getElementById('bottomborder');
+            let border = document.getElementById('bottomborder');
             border.innerHTML = '2/2';
         }
         document.getElementById('emp_info').classList.add('hide');
         document.getElementById('laptop').classList.remove('hide');
         document.getElementById('bottomborder').style.left = '50%';
         document.getElementById('bottomborder').style.width = '42%';
+
+        sessionStorage.setItem('page',2); //saves page number
     }
 }
-
-function back(){
-    document.getElementById('emp_info').classList.remove('hide');
-    document.getElementById('laptop').classList.add('hide');
-
-    if(window.innerWidth < 600){
-        const nav = document.getElementById('nav');
-        nav.children[0].classList.remove('hide');
-        nav.children[1].classList.add('hide');
-
-        const border = document.getElementById('bottomborder');
-        border.innerHTML = '1/2';
-    } else{
-        document.getElementById('bottomborder').style.left = '9%';
-        document.getElementById('bottomborder').style.width = '30%';
-    }
-}
-
-function getinfoLS(){
-    if(exc){
-    let getinfo = JSON.parse(localStorage.getItem("info"));
-    let getlapinfo = JSON.parse(localStorage.getItem("lapinfo"));
-        
-        for(i in getinfo){
-            if(i == 'team_id' || i == 'position_id'){
-                continue;
-            }
-            document.forms['empinfo'][i].value = getinfo[i];
-        }
-
-        for(i in getlapinfo){
-            if(i == 'laptop_image'){
-                continue;
-            }
-            if(i == 'laptop_brand_id'){
-                for(j of document.forms['lapinfo']['laptop_brand_id'].children){
-                    if(j.id == getlapinfo[i]){
-                        document.forms['lapinfo'][i].value = j.value;
-                        lapinfo.laptop_brand_id = j.id;
-                    }
-                }
-                continue;
-            }
-            document.forms['lapinfo'][i].value = getlapinfo[i];
-        }
-
-        exc = 0;
-    }
-}
-
 
 //laptop info
-const brands = document.getElementById('laptop_brand_id');
-const cpus = document.getElementById('laptop_cpu');
+const brand = document.getElementById('laptop_brand_id');
+const brands = document.getElementById('laptop_brands');
+const cpu = document.getElementById('laptop_cpu');
+const cpus = document.getElementById('laptop_cpus');
 
 getbrands(API+'/brands');
 getcpus(API+'/cpus');
+getinfo();
 
 async function getbrands(url){
     let resp = await fetch(url);
     let respdata = await resp.json();
 
-    brands.innerHTML = '<option class="hide" value="">ლეპტოპის ბრენდი</option>';
-
-    respdata.data.forEach(team => {
-        let option = document.createElement('option');
-        option.id = team.id;
-        option.innerHTML = team.name;
+    respdata.data.forEach(brand => {
+        let option = document.createElement('p');
+        option.id = brand.id;
+        option.innerHTML = brand.name;
         
         brands.appendChild(option);
     });
 }
 
+brands.addEventListener('mouseup', (e) => {
+    brand.value = e.target.value;
+});
+
 async function getcpus(url){
     let resp = await fetch(url);
     let respdata = await resp.json();
 
-    cpus.innerHTML = '<option class="hide" value="">CPU</option>';
-
-    respdata.data.forEach(team => {
-        let option = document.createElement('option');
-        option.id = team.id;
-        option.innerHTML = team.name;
+    respdata.data.forEach(cpu => {
+        let option = document.createElement('p');
+        option.id = cpu.id;
+        option.value = cpu.name;
+        option.innerHTML = cpu.name;
         
         cpus.appendChild(option);
     });
 }
 
+cpus.addEventListener('mouseup', (e) => {
+    cpu.value = e.target.value;
+});
+
 function loadFile(event) {
     var imginput = document.getElementById('imageinput');
     imginput.classList.remove('image_free');
     imginput.classList.add('image_occupied');
-	imginput.children[0].src = URL.createObjectURL(event.target.files[0]);
-    imginput.children[0].classList.remove('hide');
+	imginput.children[0].src = URL.createObjectURL(event.target.files[0]); //preview image
     imginput.children[0].style.width = '100%';
-    imginput.children[2].src = 'resource/checked.png';
+    imginput.children[0].classList.remove('hide');
+    imginput.children[2].src = 'resource/checked.png'; //change error icon to checked
     imginput.children[2].classList.remove('hide');
-    imginput.children[3].innerHTML = event.target.files[0].name;
+    imginput.children[3].innerHTML = event.target.files[0].name; //show file name
     imginput.children[4].innerHTML = 'თავიდან ატვირთე';
-    imginput.children[4].classList.remove('hide');
+    imginput.children[4].classList.remove('hide'); //if button(h5) is hide, show (on responsive)
 
     let p = document.createElement('p');
     let size = event.target.files[0].size;
@@ -476,7 +359,7 @@ function lap_validateForm(){
     if(date.value == '' || date_r){
         date.style.borderColor = '#8AC0E2';
         date.previousElementSibling.style.color = 'black';
-    } else{
+    } else {
         date.style.borderColor = 'red';
         date.previousElementSibling.style.color = 'red';
     }
@@ -521,9 +404,107 @@ function lap_validateForm(){
     }
 }
 
+
+
+
+"change keyup mouseup".split(" ").forEach((e) => {
+    document.forms['empinfo'].addEventListener(e, ()=> {
+        setinfo();
+    });
+
+    document.forms['lapinfo'].addEventListener(e, ()=> {
+        setinfo();
+    });
+});
+
+//save info (localstorage and API)
+function setinfo(){
+    formData = new FormData(document.getElementById('empinfo'));
+    let lapinfoData = new FormData(document.getElementById('lapinfo'));
+
+    //save empdata
+    formData.set(team.id,team.value);
+    formData.set(position.id,position.value);
+    for ([key, value] of formData) {
+        info[key] = value;
+    }
+    localStorage.setItem('info', JSON.stringify(info));
+
+    //save laptop data
+    lapinfoData.set(brand.id,brand.value);
+    lapinfoData.set(cpu.id,cpu.value);
+    for ([key, value] of lapinfoData) {
+        lapinfo[key] = value;
+        formData.append(key, value);
+    }
+    localStorage.setItem('lapinfo', JSON.stringify(lapinfo));
+}
+
+function getinfo(){
+    let getinfo = JSON.parse(localStorage.getItem('info'));
+    let getlapinfo = JSON.parse(localStorage.getItem('lapinfo'));
+    
+    for(let info in getinfo){
+        document.forms['empinfo'][info].value = getinfo[info];
+
+        if(getinfo['team_id'] != 'თიმი'){
+            getpositions(API+'/positions');
+        }
+    }
+    
+    for(let info in getlapinfo){
+        if(info == 'laptop_image'){
+            continue;
+        }
+        document.forms['lapinfo'][info].value = getlapinfo[info];
+    }
+}
+
+function back(){
+    document.getElementById('emp_info').classList.remove('hide');
+    document.getElementById('laptop').classList.add('hide');
+    sessionStorage.setItem('page',1);
+
+    if(window.innerWidth < 600){
+        const nav = document.getElementById('nav');
+        nav.children[0].classList.remove('hide');
+        nav.children[1].classList.add('hide');
+
+        const border = document.getElementById('bottomborder');
+        border.innerHTML = '1/2';
+    } else{
+        document.getElementById('bottomborder').style.left = '9%';
+        document.getElementById('bottomborder').style.width = '30%';
+    }
+}
+
 function finish(){
     document.getElementById('laptop').classList.add('hide');
     document.getElementById('popupback').classList.remove('hide');
+
+    let getlapinfo = JSON.parse(localStorage.getItem('lapinfo'));
+
+    for(let info in getlapinfo){
+        formData.append(info,getlapinfo[info]);
+    }
+    
+    for(i of teams.children){
+        if(i.innerHTML == formData.get('team_id')){
+            formData.set('team_id', i.id);
+        }
+    }
+    
+    for(i of positions.children){
+        if(i.innerHTML == formData.get('position_id')){
+            formData.set('position_id', i.id);
+        }
+    }
+    
+    for(i of brands.children){
+        if(i.innerHTML == formData.get('laptop_brand_id')){
+            formData.set('laptop_brand_id', i.id);
+        }
+    }
 
     formData.append('token',token);
 
@@ -533,6 +514,21 @@ function finish(){
     request.onload = () => console.log(request.responseText);
 
     localStorage.clear();
+}
+
+//show select options
+function show(e) {
+    e.nextElementSibling.classList.toggle("hide");
+}
+
+//close select options
+window.onclick = function(event) {
+    if (!event.target.matches('.form-select')) {
+      var dropdowns = document.getElementsByClassName("dropdown-content");
+      for (i = 0; i < dropdowns.length-1; i++) {
+        dropdowns[i].classList.add('hide');
+      }
+    }
 }
 
 //responsive
