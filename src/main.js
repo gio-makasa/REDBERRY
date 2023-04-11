@@ -18,8 +18,8 @@ const router = createRouter({
         { path: '/home', component: TheHome },
         {
             path: '/AddItem', component: AddItem, children: [
-                { path: 'StuffInfo', component: StuffInfo },
-                { path: 'LaptopInfo', component: LaptopInfo }
+                { path: '/AddItem/StuffInfo', component: StuffInfo },
+                { path: '/AddItem/LaptopInfo', component: LaptopInfo }
             ]
         },
         { path: '/list', component: TheList },
