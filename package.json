@@ -14,5 +14,18 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.1.2",
     "vite": "^3.1.8"
-  }
+  },
+  "description": "This template should help get you started developing with Vue 3 in Vite.",
+  "main": "vite.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gio-makasa/REDBERRY.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gio-makasa/REDBERRY/issues"
+  },
+  "homepage": "https://github.com/gio-makasa/REDBERRY#readme"
 }
