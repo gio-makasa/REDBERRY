@@ -403,4 +403,23 @@ input[class|="failed"],
 .failed {
   border: 0.1rem solid red;
 }
+
+@media screen and (max-width: 1000px) {
+  #fullname {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  button {
+    width: 50%;
+  }
+}
+@media screen and (max-width: 500px) {
+  main {
+    padding: 0 0.2rem;
+  }
+  main,
+  button {
+    width: 100%;
+  }
+}
 </style>

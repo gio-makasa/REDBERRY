@@ -586,6 +586,7 @@ select {
   align-items: center;
   margin: 2rem 0 3rem;
 }
+
 a {
   color: var(--buttonColor);
   text-decoration: none;
@@ -597,9 +598,10 @@ button {
   color: white;
   border: none;
   border-radius: 0.5rem;
-  padding: 1rem 2rem;
-  width: 20%;
+  padding: 1rem 1%;
+  width: 25%;
   margin-left: auto;
+  text-align: center;
   cursor: pointer;
 }
 
@@ -639,5 +641,25 @@ label[class|="failed"] {
 label[class~="errorImage"] {
   background-color: rgba(255, 0, 0, 0.1);
   border-color: red;
+}
+
+@media screen and (max-width: 1000px) {
+  .multipleInput {
+    flex-direction: column;
+    gap: 3rem;
+  }
+  button {
+    width: 50%;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  main {
+    width: 100%;
+    padding: 0 0.2rem;
+  }
+  button {
+    width: 60%;
+  }
 }
 </style>

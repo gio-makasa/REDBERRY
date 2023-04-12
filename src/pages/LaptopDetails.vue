@@ -173,6 +173,10 @@ main {
   align-items: flex-start;
 }
 
+img {
+  margin: auto;
+}
+
 table {
   margin: 2rem 0;
 }
@@ -182,5 +186,21 @@ td {
 td:first-child {
   font-weight: bold;
   width: 40%;
+}
+
+@media screen and (max-width: 1000px) {
+  * {
+    font-size: 95%;
+  }
+  main {
+    width: 100%;
+  }
+  .Row {
+    grid-template-columns: 100%;
+  }
+  td:first-child {
+    width: 50%;
+    padding-left: 0.5rem;
+  }
 }
 </style>

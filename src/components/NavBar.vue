@@ -1,17 +1,34 @@
 <template>
   <nav>
-    <router-link to="/Home" id="back_arrow"
-      ><img src="../assets/images/back.png" alt="back_arrow"
-    /></router-link>
+    <router-link to="/Home" id="back_arrow">
+      <picture>
+        <source
+          srcset="../assets/images/mobile-back.png"
+          media="(max-width: 500px)"
+        />
+        <source srcset="../assets/images/back.png" />
+        <img
+          :class="{ mobile: screenSize <= 500 }"
+          src="../assets/images/back.png"
+          alt="back_arrow"
+        />
+      </picture>
+    </router-link>
 
     <h2 v-if="activeList">ჩანაწერების სია</h2>
     <h2 v-else-if="activeDetails">ლეპტოპის ინფო</h2>
 
     <div v-else>
-      <router-link to="/AddItem/StuffInfo" :class="{ active: activeStuff }"
+      <router-link
+        v-if="activeStuff || screenSize > 500"
+        to="/AddItem/StuffInfo"
+        :class="{ active: activeStuff }"
         >თანამშრომლის ინფო</router-link
       >
-      <router-link to="/AddItem/LaptopInfo" :class="{ active: activeLaptop }"
+      <router-link
+        v-if="activeLaptop || screenSize > 500"
+        to="/AddItem/LaptopInfo"
+        :class="{ active: activeLaptop }"
         >ლეპტოპის მახასიათებლები</router-link
       >
     </div>
@@ -32,6 +49,9 @@ export default {
     },
     activeDetails() {
       return this.$route.path.includes("LaptopDetails");
+    },
+    screenSize() {
+      return screen.width;
     },
   },
 };
@@ -66,6 +86,10 @@ a {
 
 img {
   height: 100%;
+}
+
+.mobile {
+  height: 1.5rem;
 }
 
 .active {

@@ -35,7 +35,7 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 22rem;
+  width: min(22rem, 100%);
   gap: 1.5rem;
 }
 
@@ -56,12 +56,5 @@ a:hover {
 
 button:active {
   background-color: var(--buttonColorActive);
-}
-
-@media screen and (max-width: 600px) {
-  #main {
-    width: 100%;
-    height: auto;
-  }
 }
 </style>

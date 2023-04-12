@@ -44,7 +44,7 @@ main {
 img {
   position: relative;
   float: left;
-  width: 40%;
+  width: 10rem;
   margin-right: 2rem;
 }
 h3 {
@@ -57,5 +57,22 @@ a {
   position: relative;
   display: block;
   margin-top: 1rem;
+}
+
+@media screen and (max-width: 1000px) {
+  main {
+    grid-template-columns: 100%;
+  }
+}
+@media screen and (max-width: 500px) {
+  *{
+    font-size: 90%;
+  }
+  main {
+    width: 100%;
+  }
+  img{
+    width: 8rem;
+  }
 }
 </style>

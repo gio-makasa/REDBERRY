@@ -25,4 +25,10 @@ body {
   padding: 0 1rem;
   background-color: #f6f6f6;
 }
+
+@media screen and (max-width: 500px) {
+  body {
+    padding: 0;
+  }
+}
 </style>
