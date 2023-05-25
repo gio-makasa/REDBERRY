@@ -9,12 +9,8 @@
   </div>
 </template>
 
-<script>
-export default {
-  created() {
-    localStorage.clear();
-  },
-};
+<script setup>
+localStorage.clear();
 </script>
 
 <style scoped>
@@ -26,6 +22,7 @@ export default {
   top: 0;
   left: 0;
 }
+
 #modal {
   position: relative;
   background-color: white;
@@ -40,6 +37,7 @@ export default {
   align-items: center;
   padding: 1rem 0;
 }
+
 a {
   display: block;
   border-radius: 0.5rem;
@@ -49,12 +47,13 @@ a {
   text-align: center;
   width: 40%;
 }
+
 #toList {
   color: white;
   background-color: var(--buttonColor);
   margin: 5rem auto 1rem;
 }
+
 #toHome {
   color: var(--buttonColor);
-}
-</style>
+}</style>

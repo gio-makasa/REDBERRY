@@ -2,16 +2,9 @@
   <nav>
     <router-link to="/Home" id="back_arrow">
       <picture>
-        <source
-          srcset="../assets/images/mobile-back.png"
-          media="(max-width: 500px)"
-        />
+        <source srcset="../assets/images/mobile-back.png" media="(max-width: 500px)" />
         <source srcset="../assets/images/back.png" />
-        <img
-          :class="{ mobile: screenSize <= 500 }"
-          src="../assets/images/back.png"
-          alt="back_arrow"
-        />
+        <img :class="{ mobile: screenSize <= 500 }" src="../assets/images/back.png" alt="back_arrow" />
       </picture>
     </router-link>
 
@@ -19,47 +12,40 @@
     <h2 v-else-if="activeDetails">ლეპტოპის ინფო</h2>
 
     <div v-else>
-      <router-link
-        v-if="activeStuff || screenSize > 500"
-        to="/AddItem/StuffInfo"
-        :class="{ active: activeStuff }"
-        >თანამშრომლის ინფო</router-link
-      >
-      <router-link
-        v-if="activeLaptop || screenSize > 500"
-        to="/AddItem/LaptopInfo"
-        :class="{ active: activeLaptop }"
-        >ლეპტოპის მახასიათებლები</router-link
-      >
+      <router-link v-if="activeStuff || screenSize > 500" to="/AddItem/StuffInfo"
+        :class="{ active: activeStuff }">თანამშრომლის ინფო</router-link>
+      <router-link v-if="activeLaptop || screenSize > 500" to="/AddItem/LaptopInfo"
+        :class="{ active: activeLaptop }">ლეპტოპის მახასიათებლები</router-link>
     </div>
   </nav>
 </template>
 
-<script>
-export default {
-  computed: {
-    activeStuff() {
-      return this.$route.path.includes("StuffInfo");
-    },
-    activeLaptop() {
-      return this.$route.path.includes("LaptopInfo");
-    },
-    activeList() {
-      return this.$route.path.includes("list");
-    },
-    activeDetails() {
-      return this.$route.path.includes("LaptopDetails");
-    },
-    screenSize() {
-      return screen.width;
-    },
-  },
-};
+<script setup>
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+
+const activeStuff = computed(() => {
+  return route.path.includes("StuffInfo");
+})
+const activeLaptop = computed(() => {
+  return route.path.includes("LaptopInfo");
+})
+const activeList = computed(() => {
+  return route.path.includes("list");
+})
+const activeDetails = computed(() => {
+  return route.path.includes("LaptopDetails");
+})
+const screenSize = computed(() => {
+  return screen.width;
+})
 </script>
 
 <style scoped>
 nav,
-nav > div {
+nav>div {
   position: relative;
   height: 3rem;
   display: flex;

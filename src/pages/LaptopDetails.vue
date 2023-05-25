@@ -87,79 +87,75 @@
   </main>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      info: {},
-      departments: [],
-      positions: [],
-      brands: [],
-      CPUs: [],
-    };
-  },
+<script setup>
+import { ref } from 'vue';
+import { useRoute } from 'vue-router';
 
-  methods: {
-    department() {
-      return this.departments[this.info.department];
-    },
-    position() {
-      if (this.positions[this.info.position]) {
-        return this.positions[this.info.position].position;
-      }
-    },
-    brand() {
-      return this.brands[this.info.laptop_brand];
-    },
-    CPU() {
-      return this.CPUs[this.info.CPU];
-    },
-  },
+const info = ref([]);
+const departments = ref([]);
+const positions = ref([]);
+const brands = ref([]);
+const CPUs = ref([]);
+const route = useRoute();
 
-  beforeCreate() {
-    fetch("https://pcfy-a6684-default-rtdb.firebaseio.com/departments.json")
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        this.departments = data;
-      });
 
-    fetch("https://pcfy-a6684-default-rtdb.firebaseio.com/positions.json")
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        this.positions = data;
-      });
+function department() {
+  return departments.value[info.value.department];
+}
+function position() {
+  if (positions.value[info.value.position]) {
+    return positions.value[info.value.position].position;
+  }
+}
+function brand() {
+  return brands.value[info.value.laptop_brand];
+}
+function CPU() {
+  return CPUs.value[info.value.CPU];
+}
 
-    fetch("https://pcfy-a6684-default-rtdb.firebaseio.com/brands.json")
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        this.brands = data;
-      });
 
-    fetch("https://pcfy-a6684-default-rtdb.firebaseio.com/CPUs.json")
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        this.CPUs = data;
-      });
+fetch("https://pcfy-a6684-default-rtdb.firebaseio.com/departments.json")
+  .then((response) => {
+    return response.json();
+  })
+  .then((data) => {
+    departments.value = data;
+  });
 
-    fetch(
-      `https://pcfy-a6684-default-rtdb.firebaseio.com/PCFY/${this.$route.params.laptopId}.json`
-    )
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        this.info = data;
-      });
-  },
-};
+fetch("https://pcfy-a6684-default-rtdb.firebaseio.com/positions.json")
+  .then((response) => {
+    return response.json();
+  })
+  .then((data) => {
+    positions.value = data;
+  });
+
+fetch("https://pcfy-a6684-default-rtdb.firebaseio.com/brands.json")
+  .then((response) => {
+    return response.json();
+  })
+  .then((data) => {
+    brands.value = data;
+  });
+
+fetch("https://pcfy-a6684-default-rtdb.firebaseio.com/CPUs.json")
+  .then((response) => {
+    return response.json();
+  })
+  .then((data) => {
+    CPUs.value = data;
+  });
+
+fetch(
+  `https://pcfy-a6684-default-rtdb.firebaseio.com/PCFY/${route.params.laptopId}.json`
+)
+  .then((response) => {
+    return response.json();
+  })
+  .then((data) => {
+    info.value = data;
+  });
 </script>
 
 <style scoped>
@@ -167,6 +163,7 @@ main {
   width: 66%;
   margin: auto;
 }
+
 .Row {
   display: grid;
   grid-template-columns: 50% 50%;
@@ -180,9 +177,11 @@ img {
 table {
   margin: 2rem 0;
 }
+
 td {
   padding: 0.5rem 0;
 }
+
 td:first-child {
   font-weight: bold;
   width: 40%;
@@ -192,12 +191,15 @@ td:first-child {
   * {
     font-size: 95%;
   }
+
   main {
     width: 100%;
   }
+
   .Row {
     grid-template-columns: 100%;
   }
+
   td:first-child {
     width: 50%;
     padding-left: 0.5rem;

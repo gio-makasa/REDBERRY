@@ -6,14 +6,9 @@
   </teleport>
 </template>
 
-<script>
+<script setup>
+import { ref } from "vue";
 import TheSuccess from "../components/TheSuccess.vue";
-export default {
-  components: { TheSuccess },
-  data() {
-    return {
-      send: false,
-    };
-  },
-};
+
+const send = ref(false);
 </script>
